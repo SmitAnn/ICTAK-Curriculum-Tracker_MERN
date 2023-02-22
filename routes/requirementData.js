@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken')
 
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '../public/RequirementFile'), function (error, success) {
+    callback(null, path.join(__dirname, '../../public/RequirementFile'), function (error, success) {
 
       if (error) { console.log(error) } else { console.log("success") }
     });
@@ -111,7 +111,8 @@ router.get('/readone/:id', verifyToken, async (req, res) => {
 router.get('/download/:file', async (req, res) => {
   try {
     let file = req.params.file;
-    res.download("../public/RequirementFile/" + file);
+    res.download("../../public/RequirementFile/" + file);
+
 
   }
   catch (err) {
