@@ -12,10 +12,10 @@ router.use(express.static('public'));
 let verifyToken = require('../routes/verifytoken');
 const bcrpt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+console.log(path.join(__dirname, '/public/RequirementFile'));
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '../public/RequirementFile'), function (error, success) {
+    callback(null, path.join(__dirname, '/public/RequirementFile'), function (error, success) {
 
       if (error) { console.log(error) } else { console.log("success") }
     });
