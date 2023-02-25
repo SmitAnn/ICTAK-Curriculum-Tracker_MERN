@@ -7,13 +7,13 @@ router.use(bodyparser.urlencoded({ extented: true }));
 
 const multer = require('multer');
 const path = require('path');
-router.use(express.static('public'));
+router.use(express.static('tmp'));
 let verifyToken = require('../routes/verifytoken');
 
 
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '../../public/CurriculumFile'), function (error, success) {
+    callback(null, path.join(__dirname, '../../tmp/CurriculumFile'), function (error, success) {
 
       if (error) { console.log(error) } else { console.log("success") }
     });
@@ -121,7 +121,7 @@ router.get('/read', async (req, res) => {
 router.get('/download/:file', async (req, res) => {
   try {
     let file = req.params.file;
-    res.download("../../public/CurriculumFile/" + file);
+    res.download("../../tmp/CurriculumFile/" + file);
 
   }
   catch (err) {

@@ -8,14 +8,14 @@ router.use(bodyparser.urlencoded({ extented: true }));
 const multer = require('multer');
 const path = require('path');
 const { stringify } = require('querystring');
-router.use(express.static('public'));
+router.use(express.static('tmp'));
 let verifyToken = require('../routes/verifytoken');
 const bcrpt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-console.log(path.join(__dirname, '/public/RequirementFile'));
+// console.log(path.join(__dirname, '../public/RequirementFile'));
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '/public/RequirementFile'), function (error, success) {
+    callback(null, path.join(__dirname, '../var/task/tmp/RequirementFile'), function (error, success) {
 
       if (error) { console.log(error) } else { console.log("success") }
     });
@@ -111,7 +111,7 @@ router.get('/readone/:id', verifyToken, async (req, res) => {
 router.get('/download/:file', async (req, res) => {
   try {
     let file = req.params.file;
-    res.download("../../public/RequirementFile/" + file);
+    res.download("../../var/task/tmp/RequirementFile/" + file);
 
 
   }
