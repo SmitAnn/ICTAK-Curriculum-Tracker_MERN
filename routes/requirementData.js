@@ -3,67 +3,16 @@ const router = express.Router();
 const RequirementModel = require('../model/requirements');
 const bodyparser = require('body-parser');
 router.use(bodyparser.json());
-const { stringify } = require('querystring');
-let verifyToken = require('../routes/verifytoken');
-const bcrpt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 
 router.use(bodyparser.urlencoded({ extented: true }));
 const multer = require('multer');
 const path = require('path');
-router.use(express.static('tmp'));
-
-
-
-const fileUpload = require('express-fileupload');
-
-// default options
-//router.use(fileUpload());
-router.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: "/tmp",
-}))
-
-router.get('/', (req, res) => {
-  res.sendFile(__dirname + "/index.html")
-})
-
-router.post('/create', (req, res) => {
-  console.log("hgf");
-  let sampleFile;
-  let uploadPath;
-
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  sampleFile = req.files.file
-  uploadPath = path.join(__dirname, '../tmp/RequirementFile/') + sampleFile.name;
-  console.log(uploadPath);
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv(uploadPath, function (err) {
-    if (err)
-      return res.status(500).send(err);
-    else {
-      let data = new RequirementModel({
-        name: req.body.name,
-        area: req.body.area,
-        institution: req.body.institution,
-        category: req.body.category,
-        hours: req.body.hours,
-        file: sampleFile.name,
-        isClosed: req.body.isClosed
-      })
-      const postData = data.save();
-      res.status(200).send({ success: true, msg: 'postData', data: postData })
-    }
-  });
-});
-
-
-
-
+const { stringify } = require('querystring');
+router.use(express.static('public'));
+let verifyToken = require('../routes/verifytoken');
+const bcrpt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+// console.log(path.join(__dirname, '../public/RequirementFile'));
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, path.join(__dirname, '../public/RequirementFile'), function (error, success) {
@@ -84,16 +33,7 @@ const upload = multer({ storage: storage })
 
 
 
-
-
-
-
-
-
-
-
-
-router.post('/create1', upload.single('file'), verifyToken, async (req, res) => {
+router.post('/create', upload.single('file'), verifyToken, async (req, res) => {
   try {
 
     console.log("running");
@@ -171,7 +111,8 @@ router.get('/readone/:id', verifyToken, async (req, res) => {
 router.get('/download/:file', async (req, res) => {
   try {
     let file = req.params.file;
-    res.download("../tmp/RequirementFile/" + file);
+    res.download("../../public/RequirementFile/" + file);
+
 
   }
   catch (err) {
